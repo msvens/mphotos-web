@@ -1,46 +1,53 @@
-# Getting Started with Create React App
+# About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is the frontend for [mphotos](https://www.github.com/msvens/mphotos).
 
-## Available Scripts
+It is my personal [photo blog](https://www.mellowtech.org). The focus is to create
+a simplified workflow from lightroom to photo blog such that once you export
+your edited images to Google Drive they will be automatically picked up by the
+photo blog.
 
-In the project directory, you can run:
+## Key Features
 
-### `yarn start`
+- Connect to google drive
+- Automatic exif parsing and thumbnail creation
+- Setting basic user profile information
+- Create, delete and edit image information
+- Private photos - set photos to only be viewable if you are logged in
+- Add photos to albums
+- Infinite scrolling of image grid
+- Editable Camera Db - images, information, etc
+- Mobile aware (swipes, etc)
+- Fullscreen mode
+- Comments, Likes
+- Configurable UI (color theme, image grid settings, etc)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Develop
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Create
+Bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### `yarn test`
+```console
+$ yarn create react-app my-app --template typescript
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Dependencis
 
-### `yarn build`
+mui components
+```console
+$ yarn add @mui/material @emotion/react @emotion/styled
+$ yarn add @mui/icons-material
+$ yarn add react-infinite-scroll-component
+$ yarn add react-image-crop
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Commands
+* **yarn start** - run in development mode
+* **yarn test** - launch tet runner
+* **yarn build** - build for production
+* **yarn eject** - use with care
 
-### `yarn eject`
+## Thanks
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
