@@ -9,7 +9,6 @@ import {
   responsiveFontSizes,
   ThemeProvider,
 } from "@mui/material";
-import ProTip from "./ProTip";
 import { MPhotos } from "./MPhotos";
 
 export default function App() {
