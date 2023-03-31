@@ -2,37 +2,36 @@ import { StandardLayout } from "../../../layouts/StandardLayout";
 import { MPPhotoGrid } from "../../../components/MPPhotoGrid";
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { MPContext } from "../../../MPContext";
-import PhotosApi from "../../../api/photoapi";
 import { useParams } from "react-router-dom";
 import { Box, IconButton, ImageListItemBar, Typography } from "@mui/material";
-import { Album, Photo, PhotoList, PhotoType } from "../../../api/types";
+import { Album, Photo, PhotoList, PhotoType } from "../../../service/types";
 import {
-  AlbumOutlined,
   Camera,
   CameraOutlined,
   SkipNext,
   SkipPrevious,
 } from "@mui/icons-material";
+import { usePhotoService } from "../../../service/mphotoservice";
 
 type AlbumParams = {
   albumId: any;
 };
 
 export function AlbumIdRoute() {
+  const ps = usePhotoService();
   const [album, setAlbum] = useState<Album>();
   const [photos, setPhotos] = useState<PhotoList>({ length: 0, photos: [] });
-  const [fetch, setFetch] = useState(false);
   const { albumId } = useParams<AlbumParams>();
   const context = useContext(MPContext);
 
   useEffect(() => {
-    PhotosApi.getAlbum(albumId)
+    ps.getAlbum(albumId)
       .then((res) => {
         setAlbum(res.info);
         setPhotos(res.photos);
       })
       .catch((e) => console.log(e));
-  }, [albumId]);
+  }, [albumId, ps]);
 
   function onUp(p: Photo) {
     alert("up " + p.id);
@@ -45,10 +44,10 @@ export function AlbumIdRoute() {
   function onCover(p: Photo) {
     const update = async () => {
       if (album) {
-        const imgUrl = PhotosApi.getImageUrl(p, PhotoType.Thumb, false, false);
+        const imgUrl = ps.getImageUrl(p, PhotoType.Landscape, false, false);
         alert(imgUrl);
         try {
-          const res = await PhotosApi.updateAlbum({
+          const res = await ps.updateAlbum({
             ...album,
             coverPic: imgUrl,
           });
@@ -58,7 +57,7 @@ export function AlbumIdRoute() {
         }
       }
     };
-    update();
+    void update();
   }
 
   function getItemBar(p: Photo): ReactNode {
@@ -70,25 +69,25 @@ export function AlbumIdRoute() {
         actionIcon={
           <>
             <IconButton
-              sx={{ color: "rgba(255, 255, 255, 0.70)" }}
+              sx={{ color: "rgba(255, 255, 255, 0.90)" }}
               aria-label={"Move Up"}
               onClick={() => onUp(p)}
             >
               <SkipPrevious />
             </IconButton>
             <IconButton
-              sx={{ color: "rgba(255, 255, 255, 0.70)" }}
+              sx={{ color: "rgba(255, 255, 255, 0.90)" }}
               aria-label={"Move Down"}
               onClick={() => onDown(p)}
             >
               <SkipNext />
             </IconButton>
             <IconButton
-              sx={{ color: "rgba(255, 255, 255, 0.70)" }}
+              sx={{ color: "rgba(255, 255, 255, 0.90)" }}
               aria-label={"Album Cover"}
               onClick={() => onCover(p)}
             >
-              {PhotosApi.getImageUrl(p, PhotoType.Thumb, false, false) ===
+              {ps.getImageUrl(p, PhotoType.Landscape, false, false) ===
               album?.coverPic ? (
                 <Camera />
               ) : (

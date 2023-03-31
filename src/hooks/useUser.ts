@@ -1,11 +1,11 @@
-import { User } from "../api/types";
+import { User } from "../service/types";
 import { useEffect, useState } from "react";
-import PhotosApi from "../api/photoapi";
+import { usePhotoService } from "../service/mphotoservice";
 
 export default function useUser(): [boolean, User, () => void] {
-  const emptyUser: User = { name: "", bio: "", pic: "" };
+  const ps = usePhotoService();
   const [isUser, setIsUser] = useState<boolean>(false);
-  const [user, setUser] = useState<User>(emptyUser);
+  const [user, setUser] = useState<User>({ name: "", bio: "", pic: "" });
   const [refresh, setRefresh] = useState<boolean>(false);
 
   function checkUser() {
@@ -15,8 +15,8 @@ export default function useUser(): [boolean, User, () => void] {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await PhotosApi.isLoggedIn();
-        const res1 = await PhotosApi.getUser();
+        const res = await ps.isLoggedIn();
+        const res1 = await ps.getUser();
         setUser(res1);
         setIsUser(res);
       } catch (error) {
@@ -25,8 +25,8 @@ export default function useUser(): [boolean, User, () => void] {
         }
       }
     };
-    fetchData();
-  }, [refresh]);
+    void fetchData();
+  }, [refresh, ps]);
 
   return [isUser, user, checkUser];
 }

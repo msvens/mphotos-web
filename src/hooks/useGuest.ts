@@ -1,16 +1,16 @@
-import { Guest } from "../api/types";
+import { Guest } from "../service/types";
 import { useEffect, useState } from "react";
-import PhotosApi from "../api/photoapi";
+import { usePhotoService } from "../service/mphotoservice";
 
 export function useGuest(): [boolean, Guest, () => void] {
-  const emptyGuest: Guest = {
+  const ps = usePhotoService();
+  const [isGuest, setIsGuest] = useState<boolean>(false);
+  const [guest, setGuest] = useState<Guest>({
     name: "",
     email: "",
     verified: false,
     time: new Date(0).toISOString(),
-  };
-  const [isGuest, setIsGuest] = useState<boolean>(false);
-  const [guest, setGuest] = useState<Guest>(emptyGuest);
+  });
   const [refresh, setRefresh] = useState<boolean>(false);
 
   function checkGuest() {
@@ -20,9 +20,9 @@ export function useGuest(): [boolean, Guest, () => void] {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await PhotosApi.isGuest();
+        const res = await ps.isGuest();
         if (res) {
-          const res1 = await PhotosApi.getGuest();
+          const res1 = await ps.getGuest();
           setGuest(res1);
         }
         setIsGuest(res);
@@ -32,8 +32,8 @@ export function useGuest(): [boolean, Guest, () => void] {
         }
       }
     };
-    fetchData();
-  }, [refresh]);
+    void fetchData();
+  }, [refresh, ps]);
 
   return [isGuest, guest, checkGuest];
 }

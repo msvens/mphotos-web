@@ -1,5 +1,5 @@
 import { StandardLayout } from "../../layouts/StandardLayout";
-import { Box, styled, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { AlbumGrid } from "./AlbumGrid";
 
 export function AlbumRoute() {

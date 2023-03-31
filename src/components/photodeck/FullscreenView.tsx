@@ -1,8 +1,8 @@
-import { Photo, PhotoType } from "../../api/types";
-import { Box, Dialog, styled } from "@mui/material";
-import PhotosApi from "../../api/photoapi";
+import { Photo, PhotoType } from "../../service/types";
+import { Box, Dialog } from "@mui/material";
 import { PhotoDeckControls } from "./PhotoDeckControls";
 import { NormalImg } from "../../layouts/Images";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type FullscreenViewProps = {
   photo: Photo;
@@ -22,6 +22,8 @@ interface TouchState {
 }
 
 export function FullscreenView(props: FullscreenViewProps) {
+  const ps = usePhotoService();
+
   const touch: TouchState = { xStart: -1, xPos: -1, yStart: -1, yPos: -1 };
 
   const onStartTouch = (event: React.TouchEvent<HTMLDivElement>) => {
@@ -76,12 +78,7 @@ export function FullscreenView(props: FullscreenViewProps) {
       >
         <NormalImg
           alt={props.photo.title}
-          src={PhotosApi.getImageUrl(
-            props.photo,
-            PhotoType.Original,
-            false,
-            false
-          )}
+          src={ps.getImageUrl(props.photo, PhotoType.Original, false, false)}
         />
         <PhotoDeckControls
           photoBackground={props.photoBackground}

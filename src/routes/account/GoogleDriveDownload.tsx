@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Job, JobState } from "../../api/types";
-import PhotosApi from "../../api/photoapi";
+import { Job, JobState } from "../../service/types";
 import { useInterval } from "../../hooks/useInterval";
 import {
   Button,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { MPProgress } from "../../components/MPProgress";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type GoogleDriveDownloadProps = {
   open: boolean;
@@ -22,6 +22,7 @@ export function GoogleDriveDownload({
   open,
   onClose,
 }: GoogleDriveDownloadProps) {
+  const ps = usePhotoService();
   const [job, setJob] = useState<Job>();
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [numPhotos, setNumPhotos] = useState<number>(0);
@@ -29,7 +30,7 @@ export function GoogleDriveDownload({
   const checkJob = () => {
     const check = async () => {
       if (job) {
-        const res = await PhotosApi.statusDriveAddPhotosJob(job.id);
+        const res = await ps.statusDriveAddPhotosJob(job.id);
         switch (res.state) {
           case JobState.FINISHED:
             setIsRunning(false);
@@ -45,23 +46,23 @@ export function GoogleDriveDownload({
         alert("no job defined");
       }
     };
-    check();
+    void check();
   };
 
   useInterval(checkJob, isRunning ? delay : null);
 
   useEffect(() => {
     if (job === undefined) {
-      PhotosApi.checkDrive()
+      ps.checkDrive()
         .then((res) => setNumPhotos(res.length))
         .catch((err) => console.log(err));
     }
-  }, [job]);
+  }, [job, ps]);
 
   //event handlers
   const handleDownload = () => {
     const scheduleJob = async () => {
-      const res = await PhotosApi.scheduleDriveAddPhotosJob();
+      const res = await ps.scheduleDriveAddPhotosJob();
       if (res.state === JobState.STARTED || res.state === JobState.SCHEDULED) {
         setIsRunning(true);
         setJob(res);
@@ -69,7 +70,7 @@ export function GoogleDriveDownload({
         alert(res.state);
       }
     };
-    scheduleJob();
+    void scheduleJob();
   };
 
   if (job) {

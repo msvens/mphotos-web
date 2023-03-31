@@ -2,24 +2,25 @@ import { Box, IconButton, ImageListItemBar, useTheme } from "@mui/material";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
 import { Bio } from "./Bio";
-import { Photo, PhotoList } from "../../api/types";
-import PhotosApi from "../../api/photoapi";
+import { Photo, PhotoList } from "../../service/types";
 import { MPPhotoGrid } from "../../components/MPPhotoGrid";
 import { LockOpen, Lock } from "@mui/icons-material";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function HomeRoute() {
+  const ps = usePhotoService();
   const [photos, setPhotos] = useState<PhotoList>({ length: 0, photos: [] });
   const theme = useTheme();
   const context = useContext(MPContext);
 
   useEffect(() => {
-    PhotosApi.getPhotos(context.uxConfig.photoSortOrder).then((res) => {
+    ps.getPhotos(context.uxConfig.photoSortOrder).then((res) => {
       setPhotos(res);
     });
-  }, [context.uxConfig.photoSortOrder]);
+  }, [context.uxConfig.photoSortOrder, ps]);
 
   function onToggleVisiblity(p: Photo) {
-    PhotosApi.togglePrivate(p.id).then((res) => {
+    ps.togglePrivate(p.id).then((res) => {
       const newPhotos = photos.photos.map((photo) => {
         if (photo.id === res.id) {
           return res;

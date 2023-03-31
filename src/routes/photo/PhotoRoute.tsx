@@ -1,17 +1,18 @@
 import { PhotoLayout } from "../../layouts/PhotoLayout";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { PhotoList } from "../../api/types";
-import { parseSearchParams } from "../../api/apiutil";
-import PhotosApi from "../../api/photoapi";
+import { PhotoList } from "../../service/types";
+import { parseSearchParams } from "../../service/apiutil";
 import { MPContext } from "../../MPContext";
 import { MPPhotoDeck } from "../../components/photodeck/MPPhotoDeck";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type PhotoParams = {
   photoId: any;
 };
 
 export function PhotoRoute() {
+  const ps = usePhotoService();
   const { photoId } = useParams<PhotoParams>();
   const location = useLocation();
   const context = useContext(MPContext);
@@ -26,22 +27,18 @@ export function PhotoRoute() {
     const fetch = async () => {
       try {
         if (location.search) {
-          const res = await PhotosApi.searchPhotos(
-            parseSearchParams(location.search)
-          );
+          const res = await ps.searchPhotos(parseSearchParams(location.search));
           setPhotoList(res);
         } else {
-          const res = await PhotosApi.getPhotos(
-            context.uxConfig.photoSortOrder
-          );
+          const res = await ps.getPhotos(context.uxConfig.photoSortOrder);
           setPhotoList(res);
         }
       } catch (e) {
         console.log(e);
       }
     };
-    fetch();
-  }, []);
+    void fetch();
+  }, [context.uxConfig.photoSortOrder, location.search, ps]);
 
   return (
     <PhotoLayout>

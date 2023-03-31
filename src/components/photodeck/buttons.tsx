@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
-import { colorScheme } from "../../api/apiutil";
 import { alpha, Box, IconButton, Tooltip, useTheme } from "@mui/material";
-import { ColorScheme } from "../../api/types";
+import { ColorScheme } from "../../service/types";
 import {
   ArrowBackIosSharp,
   ArrowForwardIosSharp,
@@ -23,10 +22,6 @@ function baseButtonStyle(cs: ColorScheme, hasBorders: boolean) {
       backgroundColor: alpha(cs.backgroundColor, 0.9).toString(),
     },
   };
-}
-
-function fontSize(largeDisplay: boolean) {
-  return largeDisplay ? "large" : "small";
 }
 
 type EditIconButtonProps = {

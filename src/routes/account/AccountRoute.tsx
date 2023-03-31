@@ -1,18 +1,5 @@
-import {
-  BrowserRouter,
-  Link as RouterLink,
-  Route,
-  Routes,
-  useParams,
-} from "react-router-dom";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  useTheme,
-} from "@mui/material";
+import { useParams } from "react-router-dom";
+
 import { Profile } from "./Profile";
 import { UxConfig } from "./UxConfig";
 import { useContext } from "react";
@@ -21,8 +8,7 @@ import { Login } from "./Login";
 import { GoogleDrive } from "./GoogleDrive";
 import { LocalDrive } from "./LocalDrive";
 import { Logout } from "./Logout";
-import { FullWidthLayout } from "../../layouts/FullWidthLayout";
-import { MenuItem, MI, MPMenuList } from "../../components/MPMenuList";
+import { MenuItem, MI } from "../../components/MPMenuList";
 import { MenuListLayout } from "../../layouts/MenuListLayout";
 
 const PROFILE = "profile";
@@ -42,7 +28,6 @@ const MenuItems = new Map<string, MenuItem>([
 export function AccountRoute() {
   const { setting } = useParams();
   const context = useContext(MPContext);
-  const theme = useTheme();
 
   function AccountSection() {
     if (!context.isUser) {

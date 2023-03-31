@@ -12,13 +12,10 @@ import {
 } from "@mui/material";
 import { DeleteForever, Edit } from "@mui/icons-material";
 import { useContext, useEffect, useState } from "react";
-import { Album } from "../../api/types";
+import { Album } from "../../service/types";
 import { MPContext } from "../../MPContext";
-import PhotosApi from "../../api/photoapi";
-import { MPDialog } from "../../components/MPDialog";
-import { AddAlbum } from "./AddAlbum";
-import { EditAlbum } from "./EditAlbum";
 import { AlbumAdd, AlbumDelete, AlbumUpdate } from "./dialogs";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type AlbumItemProps = {
   a: Album;
@@ -112,6 +109,7 @@ function AlbumItem({ a, onEdit, onDelete }: AlbumItemProps) {
 }
 
 export function AlbumGrid() {
+  const ps = usePhotoService();
   const [albums, setAlbums] = useState<Album[]>([]);
   const [album, setAlbum] = useState<Album | undefined>(undefined);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -121,10 +119,10 @@ export function AlbumGrid() {
   const context = useContext(MPContext);
 
   useEffect(() => {
-    PhotosApi.getAlbums()
+    ps.getAlbums()
       .then((res) => setAlbums(res))
       .catch((e) => alert(e.toString()));
-  }, []);
+  }, [ps]);
 
   function onAdd() {
     setShowAdd(true);
@@ -144,8 +142,8 @@ export function AlbumGrid() {
     const del = async () => {
       if (a) {
         try {
-          await PhotosApi.deleteAlbum(a.id);
-          const newAlbums = await PhotosApi.getAlbums();
+          await ps.deleteAlbum(a.id);
+          const newAlbums = await ps.getAlbums();
           setAlbums(newAlbums);
           setAlbum(undefined);
         } catch (e) {
@@ -154,15 +152,15 @@ export function AlbumGrid() {
       }
       setShowDelete(false);
     };
-    del();
+    void del();
   }
 
   function closeUpdate(a?: Album) {
     const update = async () => {
       if (a) {
         try {
-          await PhotosApi.updateAlbum(a);
-          const newAlbums = await PhotosApi.getAlbums();
+          await ps.updateAlbum(a);
+          const newAlbums = await ps.getAlbums();
           setAlbums(newAlbums);
           setShowUpdate(false);
         } catch (e) {
@@ -170,14 +168,14 @@ export function AlbumGrid() {
         }
       }
     };
-    update();
+    void update();
   }
   const closeAdd = (a?: Album) => {
     const add = async () => {
       if (a) {
         try {
-          await PhotosApi.addAlbum(a.name, a.description, "");
-          const newAlbums = await PhotosApi.getAlbums();
+          await ps.addAlbum(a.name, a.description, "");
+          const newAlbums = await ps.getAlbums();
           setAlbums(newAlbums);
           setAlbum(undefined);
         } catch (e) {
@@ -186,14 +184,14 @@ export function AlbumGrid() {
       }
       setShowAdd(false);
     };
-    add();
+    void add();
   };
 
   return (
     <>
       <Grid2 container spacing={2} width={"100%"}>
         {context.isUser && <AddItem onAdd={onAdd} />}
-        {albums.map((album, index) => (
+        {albums.map((album, _) => (
           <AlbumItem
             a={album}
             onDelete={onDelete}

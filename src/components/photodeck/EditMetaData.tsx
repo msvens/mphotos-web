@@ -1,6 +1,5 @@
-import { Album, Photo } from "../../api/types";
+import { Album, Photo } from "../../service/types";
 import { useEffect, useState } from "react";
-import PhotosApi from "../../api/photoapi";
 import {
   Checkbox,
   FormControl,
@@ -12,7 +11,8 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import { MPDialog } from "../../components/MPDialog";
+import { MPDialog } from "../MPDialog";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type EditMetaDataProps = {
   open: boolean;
@@ -21,6 +21,7 @@ type EditMetaDataProps = {
 };
 
 export function EditMetaData({ open, photo, onClose }: EditMetaDataProps) {
+  const ps = usePhotoService();
   const [albums, setAlbums] = useState<Album[]>([]);
   const [albumNames, setAlbumNames] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
@@ -28,10 +29,10 @@ export function EditMetaData({ open, photo, onClose }: EditMetaDataProps) {
   const [keywords, setKeywords] = useState<string>("");
 
   useEffect(() => {
-    PhotosApi.getAlbums()
+    ps.getAlbums()
       .then((res) => setAlbums(res))
       .catch((error) => console.log(error));
-  }, []);
+  }, [ps]);
 
   useEffect(() => {
     //setP(photo)
@@ -44,7 +45,7 @@ export function EditMetaData({ open, photo, onClose }: EditMetaDataProps) {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const res = await PhotosApi.getPhotoAlbums(photo.id);
+        const res = await ps.getPhotoAlbums(photo.id);
         const names: string[] = [];
         for (let i = 0; i < res.length; i++) {
           names.push(res[i].name);
@@ -54,8 +55,8 @@ export function EditMetaData({ open, photo, onClose }: EditMetaDataProps) {
         console.log(error);
       }
     };
-    fetchAlbums();
-  }, [photo]);
+    void fetchAlbums();
+  }, [photo, ps]);
 
   function getAlbumIds(): string[] {
     const ids: string[] = [];
@@ -72,7 +73,7 @@ export function EditMetaData({ open, photo, onClose }: EditMetaDataProps) {
 
   //event handlers:
   const handleUpdatePhoto = () => {
-    PhotosApi.updatePhoto(photo.id, title, description, keywords, getAlbumIds())
+    ps.updatePhoto(photo.id, title, description, keywords, getAlbumIds())
       .then((res) => {
         onClose(res);
       })

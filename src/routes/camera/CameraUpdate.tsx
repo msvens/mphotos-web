@@ -1,12 +1,12 @@
-import { Camera } from "../../api/types";
+import { Camera } from "../../service/types";
 import { useState } from "react";
-import PhotosApi from "../../api/photoapi";
 import {
   getCameraSettingDisplayName,
   setCameraSetting,
-} from "../../api/apiutil";
+} from "../../service/apiutil";
 import { Input, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { MPDialog } from "../../components/MPDialog";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type UpdateProps = {
   onClose: (c?: Camera) => void;
@@ -15,18 +15,19 @@ type UpdateProps = {
 };
 
 export function CameraUpdate({ onClose, open, camera }: UpdateProps) {
+  const ps = usePhotoService();
   const [c, setC] = useState<Camera>(camera);
 
   const handleOk = () => {
     const update = async () => {
       try {
-        const res = await PhotosApi.updateCamera(c);
+        const res = await ps.updateCamera(c);
         onClose(res);
       } catch (e) {
         alert(e);
       }
     };
-    update();
+    void update();
   };
 
   const handleCameraChange = (

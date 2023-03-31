@@ -1,4 +1,4 @@
-import { Album } from "../../api/types";
+import { Album } from "../../service/types";
 import { MPDialog } from "../../components/MPDialog";
 import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
@@ -32,26 +32,6 @@ export function AlbumUpdate({ onClose, open, album }: AlbumDialogProps) {
     }
   }, [album]);
 
-  /*
-  const handleOk = () => {
-    const updateAlbum = async () => {
-      const id = album.id;
-      const coverPic = album.coverPic;
-      try {
-        const a = await PhotosApi.updateAlbum({
-          id,
-          name,
-          description,
-          coverPic,
-        });
-        onClose(a);
-      } catch (e) {
-        alert(e);
-      }
-    };
-    updateAlbum();
-  };
-*/
   function handleOk() {
     if (album) {
       onClose({

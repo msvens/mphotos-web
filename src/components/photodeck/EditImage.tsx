@@ -1,8 +1,7 @@
 import "react-image-crop/dist/ReactCrop.css";
-import { EditPhotoParams, Photo, PhotoType } from "../../api/types";
+import { EditPhotoParams, Photo, PhotoType } from "../../service/types";
 import { Box, Dialog, styled } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import PhotosApi from "../../api/photoapi";
 import ReactCrop, {
   centerCrop,
   Crop,
@@ -11,6 +10,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import { useRotateImage } from "../../hooks/useRotateImage";
 import { CropControls, EditAction } from "./CropControls";
+import { usePhotoService } from "../../service/mphotoservice";
 
 const landscape = 1200 / 628;
 const square = 1;
@@ -59,6 +59,7 @@ type EditImageProps = {
 };
 
 export function EditImage(props: EditImageProps) {
+  const ps = usePhotoService();
   const imgRef = useRef<HTMLImageElement>(null);
   const [aspect, setAspect] = useState<number | undefined>(
     getAspect(props.photo)
@@ -67,7 +68,7 @@ export function EditImage(props: EditImageProps) {
   const [preview, setPreview] = useState<boolean>(false);
   const { src: imgSrc } =
     useRotateImage(
-      PhotosApi.getImageUrl(props.photo, PhotoType.Original, false, false),
+      ps.getImageUrl(props.photo, PhotoType.Original, false, false),
       rotate
     ) ?? {};
   const [crop, setCrop] = useState<Crop>();
@@ -104,10 +105,6 @@ export function EditImage(props: EditImageProps) {
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget;
     setCrop(centerAndAspectCrop(getAspect(props.photo), width, height));
-    //alert("load: "+width+" "+height)
-    //setDim({width: width, height: height})
-    //imgWidth = width
-    //imgHeight = height
   };
 
   const handleEditAction = (a: EditAction) => {
@@ -137,10 +134,11 @@ export function EditImage(props: EditImageProps) {
         });
         break;
       case EditAction.Restore:
+        setPreview(false);
         setRotate(0);
         setAspect(getAspect(props.photo));
         break;
-      case EditAction.Save:
+      case EditAction.Preview:
         setPreview((prev) => !prev);
         break;
       default:
@@ -167,7 +165,7 @@ export function EditImage(props: EditImageProps) {
       >
         {preview ? (
           <StyledImg
-            src={PhotosApi.getEditPreviewURL(props.photo, getPhotoParams())}
+            src={ps.getEditPreviewURL(props.photo, getPhotoParams())}
           />
         ) : (
           <ReactCrop

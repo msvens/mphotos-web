@@ -1,9 +1,10 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
-import PhotosApi from "../../api/photoapi";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function Profile() {
+  const ps = usePhotoService();
   const context = useContext(MPContext);
 
   const [name, setName] = useState<string>("");
@@ -11,14 +12,14 @@ export function Profile() {
   const [pic, setPic] = useState<string>("");
 
   useEffect(() => {
-    PhotosApi.getUser()
+    ps.getUser()
       .then((u) => {
         setName(u.name);
         setBio(u.bio);
         setPic(u.pic);
       })
       .catch((e) => alert(e.toString()));
-  }, []);
+  }, [ps]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -31,7 +32,7 @@ export function Profile() {
   };
 
   const handleSubmit = () => {
-    PhotosApi.updateUser(name, bio, pic)
+    ps.updateUser(name, bio, pic)
       .then(() => context.checkUser())
       .catch((err) => alert(err.toString()));
   };

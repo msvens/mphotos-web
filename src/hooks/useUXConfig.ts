@@ -1,9 +1,11 @@
-import { UXConfig } from "../api/types";
-import PhotosApi from "../api/photoapi";
+import { UXConfig } from "../service/types";
 import { useEffect, useState } from "react";
+import { usePhotoService } from "../service/mphotoservice";
+import { DefaultUxConfig } from "../service/apiutil";
 
 export function useUXConfig(): [UXConfig, () => void] {
-  const [uxConfig, setUXConfig] = useState<UXConfig>(PhotosApi.defaultUxConfig);
+  const ps = usePhotoService();
+  const [uxConfig, setUXConfig] = useState<UXConfig>(DefaultUxConfig);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   function checkUXConfig() {
@@ -13,7 +15,7 @@ export function useUXConfig(): [UXConfig, () => void] {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await PhotosApi.getUXConfig();
+        const res = await ps.getUXConfig();
         setUXConfig(res);
       } catch (error) {
         if (error instanceof Error) {
@@ -21,8 +23,8 @@ export function useUXConfig(): [UXConfig, () => void] {
         }
       }
     };
-    fetchData();
-  }, [refresh]);
+    void fetchData();
+  }, [refresh, ps]);
 
   return [uxConfig, checkUXConfig];
 }

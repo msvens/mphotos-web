@@ -1,10 +1,8 @@
 import { ReactComponent as LogoWhite } from "../../components/mp_logo_white.svg";
-import { Box, Link, Typography, useTheme } from "@mui/material";
-import { StandardLayout } from "../../layouts/StandardLayout";
+import { Box, Link, Typography } from "@mui/material";
 import { DocLayout } from "../../layouts/DocLayout";
 
 export function AboutRoute() {
-  const theme = useTheme();
   return (
     <DocLayout>
       <Box

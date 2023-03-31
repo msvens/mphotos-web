@@ -2,14 +2,16 @@ import { useContext, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
+  Drawer,
+  IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
 import {
   HomeOutlined,
+  Menu,
   Person,
   PersonAdd,
   PhotoAlbumOutlined,
@@ -42,7 +44,7 @@ export function HamburgerMenu() {
       setState({ ...state, [anchor]: open });
     };
 
-  const menuList = (anchor: Anchor) => (
+  const menuList = () => (
     <Box
       sx={{ width: 250 }}
       role="presentation"
@@ -85,5 +87,24 @@ export function HamburgerMenu() {
     </Box>
   );
 
-  return <div></div>;
+  return (
+    <>
+      <IconButton
+        edge="start"
+        aria-label="menu"
+        onClick={toggleDrawer("right", true)}
+        size={"small"}
+      >
+        <Menu fontSize="large" />
+      </IconButton>
+
+      <Drawer
+        anchor="right"
+        open={state["right"]}
+        onClose={toggleDrawer("right", false)}
+      >
+        {menuList()}
+      </Drawer>
+    </>
+  );
 }

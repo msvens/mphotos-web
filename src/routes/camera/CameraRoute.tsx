@@ -1,24 +1,23 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
-import { Camera } from "../../api/types";
-import PhotosApi from "../../api/photoapi";
-import Grid2 from "@mui/material/Unstable_Grid2";
+import { Camera } from "../../service/types";
 import { IconButton, TextField, Box } from "@mui/material";
 import { CameraDetail } from "./CameraDetail";
 import { Edit, ImageOutlined } from "@mui/icons-material";
 import { MPDialog } from "../../components/MPDialog";
 import { MPFileInput } from "../../components/MPFileInput";
 import { CameraUpdate } from "./CameraUpdate";
-import { MenuItem, MI, MPMenuList } from "../../components/MPMenuList";
-import { FullWidthLayout } from "../../layouts/FullWidthLayout";
+import { MenuItem, MI } from "../../components/MPMenuList";
 import { MenuListLayout } from "../../layouts/MenuListLayout";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function CameraRoute() {
+  const ps = usePhotoService();
   const { cameraId } = useParams<any>();
   const context = useContext(MPContext);
-  const navigate = useNavigate();
-  const [cameras, setCameras] = useState<Camera[]>([]);
+  //const navigate = useNavigate();
+  //const [cameras, setCameras] = useState<Camera[]>([]);
   const [cameraMenu, setCameraMenu] = useState<Map<string, MenuItem>>(
     new Map()
   );
@@ -29,9 +28,9 @@ export function CameraRoute() {
   const [file, setFile] = useState<File>();
 
   useEffect(() => {
-    PhotosApi.getCameras()
+    ps.getCameras()
       .then((c) => {
-        setCameras(c);
+        //setCameras(c);
         const cm = new Map<string, MenuItem>();
         let didSet = false;
         for (var cc of c) {
@@ -45,7 +44,7 @@ export function CameraRoute() {
         if (!didSet) setCamera(c[0]);
       })
       .catch((err) => alert(err));
-  }, [cameraId]);
+  }, [cameraId, ps]);
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
@@ -55,10 +54,11 @@ export function CameraRoute() {
     if (event) setFile(event[0]);
   };
 
+  //fix set camera menu!
   const onUpdateCamera = (u?: Camera) => {
     if (u) {
-      PhotosApi.getCameras().then((c) => {
-        setCameras(c);
+      ps.getCameras().then((c) => {
+        //setCameras(c);
         for (var cc of c) {
           if (cc.id === u.id) {
             setCamera(cc);
@@ -74,25 +74,26 @@ export function CameraRoute() {
       try {
         if (camera) {
           if (file) {
-            await PhotosApi.uploadCameraImage(camera.id, file);
+            await ps.uploadCameraImage(camera.id, file);
           } else if (url) {
-            await PhotosApi.updateCameraImage(camera.id, url);
+            await ps.updateCameraImage(camera.id, url);
           } else {
             alert("Neither file or image url was provided");
             return;
           }
-          const newCams = await PhotosApi.getCameras();
+          const newCams = await ps.getCameras();
           for (var cc of newCams) {
             if (cc.id === camera.id) setCamera(cc);
           }
-          setCameras(newCams);
+          //fix setCamera Menu instead...
+          //setCameras(newCams);
         }
       } catch (e) {
         alert(e);
       }
     };
     setShowImageDialog(false);
-    update();
+    void update();
   };
 
   function editButtons() {

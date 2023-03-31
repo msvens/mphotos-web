@@ -1,7 +1,7 @@
 import { Box, Button, Theme, useTheme } from "@mui/material";
-import { ColorScheme } from "../../api/types";
+import { ColorScheme } from "../../service/types";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import { parseSearchParams } from "../../api/apiutil";
+import { parseSearchParams } from "../../service/apiutil";
 
 type SearchFilterProps = {
   filter: string;

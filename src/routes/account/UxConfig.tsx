@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   FormControl,
   FormControlLabel,
@@ -13,8 +12,8 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
-import { Colors, UXConfig } from "../../api/types";
-import PhotosApi from "../../api/photoapi";
+import { Colors, UXConfig } from "../../service/types";
+import { usePhotoService } from "../../service/mphotoservice";
 
 const gridSpacings = [
   {
@@ -41,6 +40,7 @@ const photoOrders = [
 ];
 
 export function UxConfig() {
+  const ps = usePhotoService();
   const context = useContext(MPContext);
 
   const [cols, setCols] = useState<number>(4);
@@ -86,13 +86,13 @@ export function UxConfig() {
           photoBorders: photoBorders,
           photoSortOrder: photoSortOrder,
         };
-        await PhotosApi.updateUXConfig(conf);
+        await ps.updateUXConfig(conf);
         context.checkUXConfig();
       } catch (e) {
         alert(e);
       }
     };
-    updateConfig();
+    void updateConfig();
   };
 
   const handleColsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,7 +116,7 @@ export function UxConfig() {
     }
   };
   const handleShowBio = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowBio((prev) => event.target.checked);
+    setShowBio(event.target.checked);
   };
   const handleDenseTopBar = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDenseTopBar(event.target.checked);

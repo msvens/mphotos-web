@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { MPContext } from "../../MPContext";
-import PhotosApi from "../../api/photoapi";
 import {
   Alert,
   Box,
@@ -9,8 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function Login() {
+  const ps = usePhotoService();
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(false);
   const context = useContext(MPContext);
@@ -20,9 +21,9 @@ export function Login() {
   };
 
   const handleLogin = () => {
-    PhotosApi.login(password)
-      .then((res) => context.checkUser())
-      .catch((err) => setAlert(true));
+    ps.login(password)
+      .then((_) => context.checkUser())
+      .catch((_) => setAlert(true));
   };
 
   return (

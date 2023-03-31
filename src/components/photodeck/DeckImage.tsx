@@ -1,7 +1,7 @@
-import { Photo, PhotoType } from "../../api/types";
+import { Photo, PhotoType } from "../../service/types";
 import { NormalImg, SmallImg } from "../../layouts/Images";
-import PhotosApi from "../../api/photoapi";
 import { useTheme } from "@mui/material";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type DeckImageProps = {
   largeDisplay: boolean;
@@ -17,18 +17,14 @@ export function DeckImage({
   photo,
   portrait,
 }: DeckImageProps) {
+  const ps = usePhotoService();
   const theme = useTheme();
 
   if (!largeDisplay) {
     return (
       <SmallImg
         alt={photo.title}
-        src={PhotosApi.getImageUrl(
-          photo,
-          PhotoType.Dynamic,
-          portrait,
-          largeDisplay
-        )}
+        src={ps.getImageUrl(photo, PhotoType.Dynamic, portrait, largeDisplay)}
       />
     );
   }
@@ -36,12 +32,7 @@ export function DeckImage({
     return (
       <NormalImg
         alt={photo.title}
-        src={PhotosApi.getImageUrl(
-          photo,
-          PhotoType.Dynamic,
-          portrait,
-          largeDisplay
-        )}
+        src={ps.getImageUrl(photo, PhotoType.Dynamic, portrait, largeDisplay)}
       />
     );
   } else if (borderStyle === "left-right") {
@@ -49,12 +40,7 @@ export function DeckImage({
       <NormalImg
         sx={{ px: theme.spacing(7) }}
         alt={photo.title}
-        src={PhotosApi.getImageUrl(
-          photo,
-          PhotoType.Dynamic,
-          portrait,
-          largeDisplay
-        )}
+        src={ps.getImageUrl(photo, PhotoType.Dynamic, portrait, largeDisplay)}
       />
     );
   } else {
@@ -62,12 +48,7 @@ export function DeckImage({
       <NormalImg
         sx={{ px: theme.spacing(7), py: theme.spacing(4) }}
         alt={photo.title}
-        src={PhotosApi.getImageUrl(
-          photo,
-          PhotoType.Dynamic,
-          portrait,
-          largeDisplay
-        )}
+        src={ps.getImageUrl(photo, PhotoType.Dynamic, portrait, largeDisplay)}
       />
     );
   }

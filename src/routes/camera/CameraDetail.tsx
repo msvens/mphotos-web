@@ -1,10 +1,10 @@
-import { Camera, CameraImageSize } from "../../api/types";
+import { Camera, CameraImageSize } from "../../service/types";
 import { Link as RouterLink } from "react-router-dom";
 import {
   createPhotoSearchParams,
   getCameraSettingDisplayName,
   toQueryString,
-} from "../../api/apiutil";
+} from "../../service/apiutil";
 import {
   Box,
   Link,
@@ -16,7 +16,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { SmallImg } from "../../layouts/Images";
-import PhotosApi from "../../api/photoapi";
+import { usePhotoService } from "../../service/mphotoservice";
 
 type DetailProps = {
   camera: Camera;
@@ -26,6 +26,7 @@ type DetailProps = {
 
 export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
   const theme = useTheme();
+  const ps = usePhotoService();
   function getQuery() {
     return toQueryString(createPhotoSearchParams(camera.model));
   }
@@ -57,7 +58,7 @@ export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
         <SmallImg
           sx={{ maxWidth: "400px" }}
           alt={camera.model}
-          src={PhotosApi.getCameraImageUrl(camera, CameraImageSize.Small)}
+          src={ps.getCameraImageUrl(camera, CameraImageSize.Small)}
         />
       </Box>
       <Box
@@ -92,7 +93,7 @@ export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
         <TableBody>
           {Object.getOwnPropertyNames(camera)
             .filter((v) => v !== "id" && v !== "image")
-            .map((n, i) => {
+            .map((n, _) => {
               return row(n);
             })}
         </TableBody>

@@ -1,13 +1,14 @@
 import { Box, Button, Typography } from "@mui/material";
-import PhotosApi from "../../api/photoapi";
 import { useContext } from "react";
 import { MPContext } from "../../MPContext";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function Logout() {
+  const ps = usePhotoService();
   const context = useContext(MPContext);
 
-  const handleLogout = async (e: React.MouseEvent) => {
-    PhotosApi.logout()
+  const handleLogout = async () => {
+    ps.logout()
       .then((_res) => {
         context.checkUser();
       })

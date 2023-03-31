@@ -1,4 +1,4 @@
-import { colorScheme } from "../../api/apiutil";
+import { colorScheme } from "../../service/apiutil";
 import {
   ButtonGroup,
   EditIconButton,
@@ -13,6 +13,7 @@ import {
   Forward5,
   RestorePage,
   Rotate90DegreesCw,
+  Preview,
   Save,
 } from "@mui/icons-material";
 
@@ -26,6 +27,7 @@ export enum EditAction {
   Restore,
   RotateRight,
   RotateRight5,
+  Preview,
 }
 
 type CropControlsProps = {
@@ -44,6 +46,9 @@ export function CropControls(props: CropControlsProps) {
   const b = props.hasBorders;
   const iconSize = props.isLargeDisplay ? "large" : "small";
 
+  const onPreview = () => {
+    props.onEdit(EditAction.Preview);
+  };
   const onSave = () => {
     props.onEdit(EditAction.Save);
   };
@@ -142,6 +147,14 @@ export function CropControls(props: CropControlsProps) {
           onClick={() => props.onEdit(EditAction.Restore)}
         >
           <RestorePage fontSize={iconSize} />
+        </EditIconButton>
+        <EditIconButton
+          hasBorders={b}
+          cs={cs}
+          tooltip="Preview Image"
+          onClick={onPreview}
+        >
+          <Preview fontSize={iconSize} />
         </EditIconButton>
         <EditIconButton
           hasBorders={b}

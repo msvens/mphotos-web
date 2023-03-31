@@ -1,10 +1,10 @@
 import { PhotoLayout } from "../../../../layouts/PhotoLayout";
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import PhotosApi from "../../../../api/photoapi";
-import { Album, PhotoList } from "../../../../api/types";
+import { Album, PhotoList } from "../../../../service/types";
 import { MPPhotoDeck } from "../../../../components/photodeck/MPPhotoDeck";
 import { MPContext } from "../../../../MPContext";
+import { usePhotoService } from "../../../../service/mphotoservice";
 
 type AlbumParams = {
   albumId: any;
@@ -12,6 +12,7 @@ type AlbumParams = {
 };
 
 export function AlbumPhotoRoute() {
+  const ps = usePhotoService();
   const context = useContext(MPContext);
   const { albumId, photoId } = useParams<AlbumParams>();
   const [album, setAlbum] = useState<Album>();
@@ -21,13 +22,13 @@ export function AlbumPhotoRoute() {
   });
 
   useEffect(() => {
-    PhotosApi.getAlbum(albumId)
+    ps.getAlbum(albumId)
       .then((res) => {
         setAlbum(res.info);
         setPhotoList(res.photos);
       })
       .catch((e) => console.log(e));
-  }, [albumId]);
+  }, [albumId, ps]);
 
   return (
     <PhotoLayout>

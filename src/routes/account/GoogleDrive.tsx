@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import PhotosApi from "../../api/photoapi";
 import { MPContext } from "../../MPContext";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { MPDialog } from "../../components/MPDialog";
 import { GoogleDriveDownload } from "./GoogleDriveDownload";
+import { usePhotoService } from "../../service/mphotoservice";
 
 const authURL = "/api/drive/auth?redir=" + encodeURIComponent("/user/drive");
 
 export function GoogleDrive() {
+  const ps = usePhotoService();
   const [folder, setFolder] = useState("");
   const [id, setId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
@@ -17,10 +18,10 @@ export function GoogleDrive() {
   const context = useContext(MPContext);
 
   useEffect(() => {
-    PhotosApi.isGoogleAuth()
+    ps.isGoogleAuth()
       .then((a) => setAuthenticated(a))
       .catch((e) => console.log("error in auth: " + e.toString()));
-  }, []);
+  }, [ps]);
 
   useEffect(() => {
     if (context.user.driveFolderId) setId(context.user.driveFolderId);
@@ -33,8 +34,8 @@ export function GoogleDrive() {
   };
 
   const handleSetFolder = async () => {
-    PhotosApi.updateUserDrive(folder)
-      .then((u) => {
+    ps.updateUserDrive(folder)
+      .then((_) => {
         context.checkUser();
       })
       .catch((err) => alert("set folder: " + err.toString()));
@@ -43,13 +44,13 @@ export function GoogleDrive() {
   const handleDelete = () => {
     const deletePhotos = async () => {
       try {
-        const res = await PhotosApi.deletePhotos(true);
+        const res = await ps.deletePhotos(true);
         alert("deleted " + res.length + " photo");
       } catch (error) {
         alert("could not delete photo: " + error);
       }
     };
-    deletePhotos();
+    void deletePhotos();
   };
 
   return (

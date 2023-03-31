@@ -1,6 +1,6 @@
-import { Guest, User, UXConfig } from "./api/types";
-import PhotosApi from "./api/photoapi";
+import { Guest, User, UXConfig } from "./service/types";
 import React from "react";
+import { DefaultUxConfig } from "./service/apiutil";
 
 export interface IMPContext {
   isGuest: boolean;
@@ -35,7 +35,7 @@ const dummyContext: IMPContext = {
   checkUser: () => {
     alert("dummy");
   },
-  uxConfig: PhotosApi.defaultUxConfig,
+  uxConfig: DefaultUxConfig,
   checkUXConfig: () => {
     alert("dummy");
   },

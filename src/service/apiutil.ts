@@ -5,8 +5,22 @@ import {
   ColorScheme,
   SearchPhotoParams,
 } from "./types";
+import * as mt from "./types";
 
 const LightBackgroundText = "rgba(0, 0, 0, 0.87)";
+
+export const DefaultUxConfig: mt.UXConfig = {
+  photoGridCols: 3,
+  photoGridSpacing: 0,
+  photoItemsLoad: 12,
+  showBio: true,
+  photoBackgroundColor: mt.Colors.Light,
+  colorTheme: "light",
+  denseBottomBar: false,
+  denseTopBar: false,
+  photoBorders: "all",
+  photoSortOrder: "upload",
+};
 
 export function createPhotoSearchParams(
   cameraModel: string

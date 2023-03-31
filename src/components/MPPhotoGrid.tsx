@@ -1,8 +1,8 @@
-import { Photo, PhotoList, PhotoType } from "../api/types";
-import { ReactNode, useEffect, useState } from "react";
-import { IconButton, ImageList, ImageListItem, styled } from "@mui/material";
+import { Photo, PhotoType } from "../service/types";
+import { ReactNode } from "react";
+import { ImageList, ImageListItem, styled } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import PhotosApi from "../api/photoapi";
+import { usePhotoService } from "../service/mphotoservice";
 
 const Thumb = styled("img")({
   width: "100%",
@@ -24,11 +24,13 @@ type MpPhotoGridProps = {
   itemListBar?: (p: Photo) => ReactNode;
 };
 
-function thumbUrl(p: Photo) {
-  return PhotosApi.getImageUrl(p, PhotoType.Thumb, false, false);
-}
-
 export function MPPhotoGrid(props: MpPhotoGridProps) {
+  const ps = usePhotoService();
+
+  function thumbUrl(p: Photo) {
+    return ps.getImageUrl(p, PhotoType.Thumb, false, false);
+  }
+
   return (
     <ImageList
       cols={props.columns}

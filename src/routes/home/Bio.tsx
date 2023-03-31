@@ -10,7 +10,7 @@ import {
 import { useContext } from "react";
 import { MPContext } from "../../MPContext";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import PhotosApi from "../../api/photoapi";
+
 import { Link as RouterLink } from "react-router-dom";
 
 function getImgClass(isLargeDisplay: boolean) {
@@ -51,7 +51,7 @@ export function Bio() {
         <Grid2>
           <Avatar
             alt={context.user.name}
-            src={PhotosApi.getProfilePicUrl(context.user)}
+            src={context.user.pic}
             sx={getImgClass(isLargeDisplay)}
           />
         </Grid2>

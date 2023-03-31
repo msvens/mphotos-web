@@ -1,4 +1,4 @@
-import { colorScheme } from "../../api/apiutil";
+import { colorScheme } from "../../service/apiutil";
 import {
   Face,
   Lock,

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Photoapi from "../../api/photoapi";
 import { Box, Button, Typography } from "@mui/material";
 import { MPDialog } from "../../components/MPDialog";
 import { MPProgress } from "../../components/MPProgress";
 import { MPFileInput } from "../../components/MPFileInput";
+import { usePhotoService } from "../../service/mphotoservice";
 
 export function LocalDrive() {
+  const ps = usePhotoService();
   const [files, setFiles] = useState<FileList | null>();
   const [percent, setPercent] = useState<number>(0);
   const [uploadDisabled, setUploadDisabled] = useState(true);
@@ -19,11 +20,10 @@ export function LocalDrive() {
   };
 
   const handleUpload = () => {
-    const upload = async () => {};
     //setOpenDownload(true)
     if (files && files.length > 0) {
       alert("uploading local photo");
-      Photoapi.uploadLocalPhoto(files[0])
+      ps.uploadLocalPhoto(files[0])
         .then((res) => alert("source: " + res))
         .catch((err) => alert("err: " + err.toString()));
     }

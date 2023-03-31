@@ -12,6 +12,7 @@ import { CameraRoute } from "./routes/camera/CameraRoute";
 import { AlbumIdRoute } from "./routes/album/albumId/AlbumIdRoute";
 import { AlbumPhotoRoute } from "./routes/album/albumId/photoId/AlbumPhotoRoute";
 import { PhotoRoute } from "./routes/photo/PhotoRoute";
+import { GuestRoute } from "./routes/guest/GuestRoute";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,6 +47,7 @@ export function MPhotos() {
             <Route path="/album" element={<AlbumRoute />} />
             <Route path="/camera/:cameraId" element={<CameraRoute />} />
             <Route path="/camera" element={<CameraRoute />} />
+            <Route path="/guest" element={<GuestRoute />} />
             <Route path="/resume" element={<ResumeRoute />} />
             <Route path="/photo/:photoId" element={<PhotoRoute />} />
             <Route path="/photo" element={<PhotoRoute />} />

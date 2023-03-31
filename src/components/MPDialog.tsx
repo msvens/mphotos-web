@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import PhotosApi from "../api/photoapi";
 import {
   Button,
   Dialog,
@@ -34,8 +33,8 @@ export function MPDialog({
   closeOnOk,
   children,
 }: MPDialogProps) {
-  const dialogTitle = "mpdialog-title-" + PhotosApi.nextId();
-  const dialogText = "mpdialog-text-" + PhotosApi.nextId();
+  const dialogTitle = "mpdialog-title";
+  const dialogText = "mpdialog-text";
 
   const handleOk = () => {
     if (onOk) {

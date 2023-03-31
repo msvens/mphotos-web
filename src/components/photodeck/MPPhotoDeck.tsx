@@ -1,20 +1,20 @@
-import { Photo } from "../../api/types";
+import { Photo, PhotoType } from "../../service/types";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
-import { colorScheme } from "../../api/apiutil";
-import { Photoslice } from "../../api/photoslice";
+import { colorScheme } from "../../service/apiutil";
+import { Photoslice } from "../../service/photoslice";
 import { SearchFilter } from "./SearchFilter";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { PhotoDeckControls } from "./PhotoDeckControls";
-import PhotosApi from "../../api/photoapi";
 import { DeckImage } from "./DeckImage";
 import { FullscreenView } from "./FullscreenView";
 import { EditImage } from "./EditImage";
 import { EditMetaData } from "./EditMetaData";
 import { MPDialog } from "../MPDialog";
 import { Detail } from "./Detail";
+import { usePhotoService } from "../../service/mphotoservice";
 
 const LargeImgGridSx = {
   position: "relative",
@@ -64,6 +64,7 @@ type MPPhotoDeckProps = {
 };
 
 export function MPPhotoDeck(props: MPPhotoDeckProps) {
+  const ps = usePhotoService();
   const theme = useTheme();
   const navigate = useNavigate();
   const context = useContext(MPContext);
@@ -96,7 +97,7 @@ export function MPPhotoDeck(props: MPPhotoDeckProps) {
     } else {
       setPhotos(new Photoslice());
     }
-  }, []);
+  }, [props.startPhotoId, props.photos]);
 
   const navigateUrl = (pd: Photoslice) => {
     if (props.searchQuery && props.searchQuery !== "") {
@@ -133,15 +134,25 @@ export function MPPhotoDeck(props: MPPhotoDeckProps) {
   };
 
   const handlePrivate = () => {
-    PhotosApi.togglePrivate(photos.id())
+    ps.togglePrivate(photos.id())
       .then((p) => {
         setPhotos(photos.update(p));
       })
       .catch((e) => alert(e.toString()));
   };
 
+  const handleProfilePic = () => {
+    ps.updateUserPic(
+      ps.getImageUrl(photos.get(), PhotoType.Thumb, false, false)
+    )
+      .then((_u) => {
+        context.checkUser();
+      })
+      .catch((e) => console.log(e.toString()));
+  };
+
   const deletePhoto = () => {
-    PhotosApi.deletePhoto(photos.id(), true)
+    ps.deletePhoto(photos.id(), true)
       .then((_p) => {
         if (props.onDeletePhoto) {
           props.onDeletePhoto(photos.get());
@@ -223,7 +234,7 @@ export function MPPhotoDeck(props: MPPhotoDeckProps) {
           onDelete={() => setShowDelete(true)}
           onEdit={() => setShowUpdate(true)}
           onCrop={() => setShowCrop(true)}
-          onProfilePic={() => alert("edit")}
+          onProfilePic={handleProfilePic}
           showEditControls={props.editControls}
           isAlbum={props.isAlbum}
           isPrivate={photos.get().private}

@@ -7,20 +7,22 @@ a simplified workflow from lightroom to photo blog such that once you export
 your edited images to Google Drive they will be automatically picked up by the
 photo blog.
 
-## Key Features
+## Version 3
 
-- Connect to google drive
+- Upload photos from Google Drive or Local Drive
 - Automatic exif parsing and thumbnail creation
 - Setting basic user profile information
-- Create, delete and edit image information
+- Create, delete and edit image meta information
+- Crop, resize and rotate images
 - Private photos - set photos to only be viewable if you are logged in
-- Add photos to albums
+- Create photo albums
 - Infinite scrolling of image grid
 - Editable Camera Db - images, information, etc
 - Mobile aware (swipes, etc)
 - Fullscreen mode
 - Comments, Likes
-- Configurable UI (color theme, image grid settings, etc)
+- Configurable UI (color theme, image grid settings, etc.)
+- And more
 
 ## Develop
 

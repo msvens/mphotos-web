@@ -1,8 +1,7 @@
-import { GuestReaction, Photo, PhotoComment } from "../../api/types";
+import { GuestReaction, Photo, PhotoComment } from "../../service/types";
 import {
   Box,
   Button,
-  Grid,
   IconButton,
   InputBase,
   Link,
@@ -11,12 +10,12 @@ import {
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { MPContext } from "../../MPContext";
-import PhotosApi from "../../api/photoapi";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
-import { toCameraId } from "../../api/apiutil";
-import { AddGuest } from "../../components/AddGuest";
+import { toCameraId } from "../../service/apiutil";
+import { AddGuest } from "../AddGuest";
+import { usePhotoService } from "../../service/mphotoservice";
 
 const months = [
   "January",
@@ -72,11 +71,11 @@ function getLikesText(likesPhoto: boolean, guests: Array<GuestReaction>) {
 
 type CommentProps = {
   comment: PhotoComment;
-  index: number;
 };
 
-function Comment({ comment, index }: CommentProps) {
-  const d = PhotosApi.toDate(comment.time);
+function Comment({ comment }: CommentProps) {
+  const ps = usePhotoService();
+  const d = ps.toDate(comment.time);
   const dStr = d.toDateString();
   return (
     <Box sx={{ marginTop: 2, marginRight: 2 }}>
@@ -97,7 +96,13 @@ type DetailProps = {
 };
 
 export function Detail(props: DetailProps) {
+  const ps = usePhotoService();
   const context = useContext(MPContext);
+  const [guests, setGuests] = useState<GuestReaction[]>([]);
+  const [comments, setComments] = useState<PhotoComment[]>([]);
+  const [showAddGuest, setShowAddGuest] = useState(false);
+  const [newComment, setNewComment] = useState<string>("");
+  const [likesPhoto, setLikesPhoto] = useState<boolean>(false);
 
   const date = () => {
     const d = new Date(props.photo.originalDate);
@@ -126,45 +131,37 @@ export function Detail(props: DetailProps) {
     props.photo.exposure +
     " secs.";
 
-  const [guests, setGuests] = useState<GuestReaction[]>([]);
-  const [comments, setComments] = useState<PhotoComment[]>([]);
-  const [showAddGuest, setShowAddGuest] = useState(false);
-  const [newComment, setNewComment] = useState<string>("");
-  const [likesPhoto, setLikesPhoto] = useState<boolean>(false);
-
   useEffect(() => {
     if (context.isGuest) {
-      PhotosApi.getGuestLike(props.photo.id)
+      ps.getGuestLike(props.photo.id)
         .then((res) => setLikesPhoto(res))
         .catch((e) => alert("error: " + e.toString()));
     } else {
       setLikesPhoto(false);
     }
-  }, [props.photo, context.isGuest]);
+  }, [props.photo, context.isGuest, ps]);
 
   useEffect(() => {
-    PhotosApi.getPhotoLikes(props.photo.id)
+    ps.getPhotoLikes(props.photo.id)
       .then((res) => setGuests(res))
       .catch((e) => alert("error: " + e.toString()));
-  }, [props.photo, likesPhoto]);
+  }, [props.photo, likesPhoto, ps]);
 
   useEffect(() => {
-    PhotosApi.getPhotoComments(props.photo.id)
+    ps.getPhotoComments(props.photo.id)
       .then((res) => setComments(res))
       .catch((e) => alert("error: " + e.toString()));
-  }, [props.photo]);
+  }, [props.photo, ps]);
 
   //event handlers
   const handleAddComment = () => {
     if (!context.isGuest) {
       setShowAddGuest(true);
     } else {
-      PhotosApi.commentPhoto(props.photo.id, newComment)
+      ps.commentPhoto(props.photo.id, newComment)
         .then((_res) => {
           setNewComment("");
-          PhotosApi.getPhotoComments(props.photo.id).then((res) =>
-            setComments(res)
-          );
+          ps.getPhotoComments(props.photo.id).then((res) => setComments(res));
         })
         .catch((err) => alert(err));
     }
@@ -174,12 +171,12 @@ export function Detail(props: DetailProps) {
     const handle = async () => {
       try {
         if (likesPhoto) {
-          await PhotosApi.unlikePhoto(props.photo.id);
+          await ps.unlikePhoto(props.photo.id);
           setLikesPhoto(false);
         } else if (!context.isGuest) {
           setShowAddGuest(true);
         } else {
-          await PhotosApi.likePhoto(props.photo.id);
+          await ps.likePhoto(props.photo.id);
           setLikesPhoto(true);
         }
       } catch (error) {
@@ -254,10 +251,10 @@ export function Detail(props: DetailProps) {
             <Button color="inherit" onClick={handleAddComment}>
               Post
             </Button>
-            {comments.map((comment, index) => (
-              <Comment comment={comment} index={index} />
-            ))}
           </Paper>
+          {comments.map((comment, _) => (
+            <Comment comment={comment} />
+          ))}
         </Grid2>
         <Grid2 xs={12} sm={6}>
           <Typography sx={{ fontWeight: "bold" }} variant="subtitle1">

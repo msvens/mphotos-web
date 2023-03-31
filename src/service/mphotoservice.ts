@@ -5,27 +5,14 @@ type MPhotosResponse<T> = {
   data?: T;
 };
 
-class PhotoApi {
-  defaultUxConfig: mt.UXConfig = {
-    photoGridCols: 3,
-    photoGridSpacing: 0,
-    photoItemsLoad: 12,
-    showBio: true,
-    photoBackgroundColor: mt.Colors.Light,
-    colorTheme: "light",
-    denseBottomBar: false,
-    denseTopBar: false,
-    photoBorders: "all",
-    photoSortOrder: "upload",
-  };
-
-  private idCounter = 0;
+class MPhotosService {
+  /*  private idCounter = 0;
 
   nextId(): number {
     let ret = this.idCounter;
     this.idCounter++;
     return ret;
-  }
+  }*/
 
   private static convert<T>(resp: MPhotosResponse<T>): T {
     if (resp.data) return resp.data;
@@ -58,7 +45,7 @@ class PhotoApi {
     }).then((res) => res.json());
   }
 
-  authGoogle(callback: string = "/login") {}
+  //authGoogle(callback: string = "/login") {}
 
   landscapeURL(p: mt.Photo): string {
     return "/api/landscapes/".concat(p.fileName);
@@ -108,51 +95,51 @@ class PhotoApi {
     coverPic: string
   ): Promise<mt.Album> {
     const data = { description: description, coverPic: coverPic, name: name };
-    return PhotoApi.reqBody("/api/albums", data)
+    return MPhotosService.reqBody("/api/albums", data)
       .then((res) => res as MPhotosResponse<mt.Album>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   checkDrive(): Promise<mt.DriveFiles> {
-    return PhotoApi.req("/api/drive/check")
+    return MPhotosService.req("/api/drive/check")
       .then((res) => res as MPhotosResponse<mt.DriveFiles>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   commentPhoto(photoId: string, comment: string): Promise<mt.PhotoComment> {
-    return PhotoApi.reqBody(
+    return MPhotosService.reqBody(
       `/api/comments/${photoId}`,
       { body: comment },
       "POST"
     )
       .then((res) => res as MPhotosResponse<mt.PhotoComment>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   deleteAlbum(id: string): Promise<mt.Album> {
-    return PhotoApi.req(`/api/albums/${id}`, "DELETE")
+    return MPhotosService.req(`/api/albums/${id}`, "DELETE")
       .then((res) => res as MPhotosResponse<mt.Album>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   deletePhoto(photoId: string, removeFiles: boolean): Promise<mt.Photo> {
-    return PhotoApi.reqBody(
+    return MPhotosService.reqBody(
       `/api/photos/${photoId}`,
       { removeFiles: removeFiles },
       "DELETE"
     )
       .then((res) => res as MPhotosResponse<mt.Photo>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   deletePhotos(removeFiles: boolean): Promise<mt.PhotoList> {
-    return PhotoApi.reqBody(
+    return MPhotosService.reqBody(
       "/api/photo",
       { removeFiles: removeFiles },
       "DELETE"
     )
       .then((res) => res as MPhotosResponse<mt.PhotoList>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getEditPreviewURL(p: mt.Photo, params: mt.EditPhotoParams): string {
@@ -203,28 +190,28 @@ class PhotoApi {
   }
 
   getUXConfig(): Promise<mt.UXConfig> {
-    return PhotoApi.req("/api/user/config")
+    return MPhotosService.req("/api/user/config")
       .then((res) => res as MPhotosResponse<mt.UXConfig>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
     //return this.uxConfig
   }
 
   getAlbums(): Promise<mt.Album[]> {
-    return PhotoApi.req(`/api/albums`)
+    return MPhotosService.req(`/api/albums`)
       .then((res) => res as MPhotosResponse<mt.Album[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getAlbum(id: number): Promise<mt.AlbumCollection> {
-    return PhotoApi.req(`/api/albums/${id}`)
+    return MPhotosService.req(`/api/albums/${id}`)
       .then((res) => res as MPhotosResponse<mt.AlbumCollection>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getCamera(id: string): Promise<mt.Camera> {
-    return PhotoApi.req(`/api/cameras/${id}`)
+    return MPhotosService.req(`/api/cameras/${id}`)
       .then((res) => res as MPhotosResponse<mt.Camera>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getCameraId(p: mt.Photo): string {
@@ -243,9 +230,9 @@ class PhotoApi {
   }
 
   getCameras(): Promise<mt.Camera[]> {
-    return PhotoApi.req(`/api/cameras`)
+    return MPhotosService.req(`/api/cameras`)
       .then((res) => res as MPhotosResponse<mt.Camera[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getThumbUrlId(id: string): string {
@@ -257,39 +244,39 @@ class PhotoApi {
   }
 
   getPhotoComments(photoId: string): Promise<mt.PhotoComment[]> {
-    return PhotoApi.req(`/api/comments/${photoId}`)
+    return MPhotosService.req(`/api/comments/${photoId}`)
       .then((res) => res as MPhotosResponse<mt.PhotoComment[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getPhotoLikes(photoId: string): Promise<mt.GuestReaction[]> {
-    return PhotoApi.req(`/api/likes/${photoId}`)
+    return MPhotosService.req(`/api/likes/${photoId}`)
       .then((res) => res as MPhotosResponse<mt.GuestReaction[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getGuest(): Promise<mt.Guest> {
-    return PhotoApi.req("/api/guest")
+    return MPhotosService.req("/api/guest")
       .then((res) => res as MPhotosResponse<mt.Guest>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getGuestLikes(): Promise<string[]> {
-    return PhotoApi.req("/api/guest/likes")
+    return MPhotosService.req("/api/guest/likes")
       .then((res) => res as MPhotosResponse<string[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getGuestLike(photoId: string): Promise<boolean> {
-    return PhotoApi.req(`/api/guest/likes/${photoId}`)
+    return MPhotosService.req(`/api/guest/likes/${photoId}`)
       .then((res) => res as MPhotosResponse<mt.GuestLike>)
-      .then((res) => PhotoApi.convert(res).like);
+      .then((res) => MPhotosService.convert(res).like);
   }
 
   getPhotoAlbums(photoId: string): Promise<mt.Album[]> {
-    return PhotoApi.req(`/api/photos/${photoId}/albums`)
+    return MPhotosService.req(`/api/photos/${photoId}/albums`)
       .then((res) => res as MPhotosResponse<mt.Album[]>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getPhotos(order?: string): Promise<mt.PhotoList> {
@@ -306,100 +293,100 @@ class PhotoApi {
     if (order !== "") {
       url = url + "&order=" + order;
     }
-    return PhotoApi.req(url)
+    return MPhotosService.req(url)
       .then((res) => res as MPhotosResponse<mt.PhotoList>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getPhoto(photoId: string): Promise<mt.Photo> {
-    return PhotoApi.req(`/api/photos/${photoId}`)
+    return MPhotosService.req(`/api/photos/${photoId}`)
       .then((res) => res as MPhotosResponse<mt.Photo>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   getUser(): Promise<mt.User> {
-    return PhotoApi.req("/api/user")
+    return MPhotosService.req("/api/user")
       .then((res) => res as MPhotosResponse<mt.User>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   isGoogleAuth(): Promise<boolean> {
-    return PhotoApi.req("/api/drive/authenticated")
+    return MPhotosService.req("/api/drive/authenticated")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res).authenticated);
+      .then((res) => MPhotosService.convert(res).authenticated);
   }
 
   isGuest(): Promise<boolean> {
-    return PhotoApi.req("/api/guest/is")
+    return MPhotosService.req("/api/guest/is")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res).authenticated);
+      .then((res) => MPhotosService.convert(res).authenticated);
   }
 
   isLoggedIn(): Promise<boolean> {
-    return PhotoApi.req("/api/loggedin")
+    return MPhotosService.req("/api/loggedin")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res).authenticated);
+      .then((res) => MPhotosService.convert(res).authenticated);
   }
 
   likePhoto(photoId: string): Promise<string> {
-    return PhotoApi.req(`/api/likes/${photoId}`, "POST")
+    return MPhotosService.req(`/api/likes/${photoId}`, "POST")
       .then((res) => res as MPhotosResponse<string>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   listDrive(): Promise<mt.DriveFiles> {
-    return PhotoApi.req("/api/drive")
+    return MPhotosService.req("/api/drive")
       .then((res) => res as MPhotosResponse<mt.DriveFiles>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   login(password: string): Promise<mt.AuthUser> {
-    return PhotoApi.reqBody("/api/login", { password: password }, "POST")
+    return MPhotosService.reqBody("/api/login", { password: password }, "POST")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   logout(): Promise<mt.AuthUser> {
-    return PhotoApi.req("/api/logout")
+    return MPhotosService.req("/api/logout")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   logoutGuest(): Promise<mt.AuthUser> {
-    return PhotoApi.req("/api/guest/logout")
+    return MPhotosService.req("/api/guest/logout")
       .then((res) => res as MPhotosResponse<mt.AuthUser>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   registerGuest(name: string, email: string): Promise<mt.Guest> {
     const data = { name: name, email: email };
-    return PhotoApi.reqBody("/api/guest", data, "POST")
+    return MPhotosService.reqBody("/api/guest", data, "POST")
       .then((res) => res as MPhotosResponse<mt.Guest>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   searchPhotos(query: mt.SearchPhotoParams): Promise<mt.PhotoList> {
-    return PhotoApi.req(`/api/photos/search?${this.toQueryString(query)}`)
+    return MPhotosService.req(`/api/photos/search?${this.toQueryString(query)}`)
       .then((res) => res as MPhotosResponse<mt.PhotoList>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   statusDriveAddPhotosJob(id: string): Promise<mt.Job> {
-    return PhotoApi.req(`/api/drive/job/${id}`)
+    return MPhotosService.req(`/api/drive/job/${id}`)
       .then((res) => res as MPhotosResponse<mt.Job>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   scheduleDriveAddPhotosJob(): Promise<mt.Job> {
-    return PhotoApi.req("/api/drive/job/schedule", "POST")
+    return MPhotosService.req("/api/drive/job/schedule", "POST")
       .then((res) => res as MPhotosResponse<mt.Job>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   togglePrivate(photoId: string): Promise<mt.Photo> {
-    return PhotoApi.req(`/api/photos/${photoId}/private`, "POST")
+    return MPhotosService.req(`/api/photos/${photoId}/private`, "POST")
       .then((res) => res as MPhotosResponse<mt.Photo>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   toQueryString(params: mt.SearchPhotoParams): string {
@@ -409,48 +396,53 @@ class PhotoApi {
   }
 
   unlikePhoto(photoId: string): Promise<string> {
-    return PhotoApi.req(`/api/likes/${photoId}`, "DELETE")
+    return MPhotosService.req(`/api/likes/${photoId}`, "DELETE")
       .then((res) => res as MPhotosResponse<string>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateAlbum(album: mt.Album): Promise<mt.Album> {
-    return PhotoApi.reqBody(`/api/albums/${album.id}`, album)
+    return MPhotosService.reqBody(`/api/albums/${album.id}`, album)
       .then((res) => res as MPhotosResponse<mt.Album>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateCamera(camera: mt.Camera): Promise<mt.Camera> {
-    return PhotoApi.reqBody(`/api/cameras/${camera.id}`, camera)
+    return MPhotosService.reqBody(`/api/cameras/${camera.id}`, camera)
       .then((res) => res as MPhotosResponse<mt.Camera>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateCameraImage(cameraId: string, imageURL: string): Promise<mt.Camera> {
-    return PhotoApi.reqBody(`/api/cameras/${cameraId}/image`, { url: imageURL })
+    return MPhotosService.reqBody(`/api/cameras/${cameraId}/image`, {
+      url: imageURL,
+    })
       .then((res) => res as MPhotosResponse<mt.Camera>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   uploadCameraImage(cameraId: string, file: File): Promise<mt.Camera> {
     const formData = new FormData();
     formData.append("image", file, file.name);
-    return PhotoApi.reqMPBody(`/api/cameras/${cameraId}/image/upoad`, formData)
+    return MPhotosService.reqMPBody(
+      `/api/cameras/${cameraId}/image/upoad`,
+      formData
+    )
       .then((res) => res as MPhotosResponse<mt.Camera>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateGuest(name: string, email: string): Promise<mt.Guest> {
     const data = { name: name, email: email };
-    return PhotoApi.reqBody("/api/guest/update", data, "POST")
+    return MPhotosService.reqBody("/api/guest/update", data, "POST")
       .then((res) => res as MPhotosResponse<mt.Guest>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   uploadDrivePhotos(): Promise<mt.DriveFiles> {
-    return PhotoApi.req("/api/drive/upload", "PUT")
+    return MPhotosService.req("/api/drive/upload", "PUT")
       .then((res) => res as MPhotosResponse<mt.DriveFiles>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   uploadLocalPhoto(file: File): Promise<mt.Photo> {
@@ -458,9 +450,9 @@ class PhotoApi {
     formData.append("sourceId", file.name);
     formData.append("sourceDate", new Date(file.lastModified).toISOString());
     formData.append("image", file, file.name);
-    return PhotoApi.reqMPBody(`/api/local/upload`, formData)
+    return MPhotosService.reqMPBody(`/api/local/upload`, formData)
       .then((res) => res as MPhotosResponse<mt.Photo>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updatePhoto(
@@ -477,43 +469,50 @@ class PhotoApi {
       keywords: keywords.split(","),
       albums: albums,
     };
-    return PhotoApi.reqBody(`/api/photos/${photoId}`, data)
+    return MPhotosService.reqBody(`/api/photos/${photoId}`, data)
       .then((res) => res as MPhotosResponse<mt.Photo>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateUXConfig(uxConfig: mt.UXConfig): Promise<mt.UXConfig> {
-    return PhotoApi.reqBody("/api/user/config", uxConfig, "POST")
+    return MPhotosService.reqBody("/api/user/config", uxConfig, "POST")
       .then((res) => res as MPhotosResponse<mt.UXConfig>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateUserDrive(name: string): Promise<mt.User> {
     alert("change folder name to " + name);
-    return PhotoApi.reqBody("/api/user/gdrive", { driveFolderName: name })
+    return MPhotosService.reqBody("/api/user/gdrive", { driveFolderName: name })
       .then((res) => res as MPhotosResponse<mt.User>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateUserPic(pic: string): Promise<mt.User> {
-    return PhotoApi.reqBody("/api/user/pic", { pic: pic })
+    return MPhotosService.reqBody("/api/user/pic", { pic: pic })
       .then((res) => res as MPhotosResponse<mt.User>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   updateUser(name: string, bio: string, pic: string): Promise<mt.User> {
-    return PhotoApi.reqBody("/api/user", { name: name, bio: bio, pic: pic })
+    return MPhotosService.reqBody("/api/user", {
+      name: name,
+      bio: bio,
+      pic: pic,
+    })
       .then((res) => res as MPhotosResponse<mt.User>)
-      .then((res) => PhotoApi.convert(res));
+      .then((res) => MPhotosService.convert(res));
   }
 
   verifyGuest(query: string): Promise<boolean> {
-    return PhotoApi.req(`/api/guest/verify${query}`)
+    return MPhotosService.req(`/api/guest/verify${query}`)
       .then((res) => res as MPhotosResponse<mt.Guest>)
-      .then((res) => PhotoApi.convert(res).verified);
+      .then((res) => MPhotosService.convert(res).verified);
   }
 }
 
-const PhotosApi = new PhotoApi();
+const PhotosService = new MPhotosService();
 
-export default PhotosApi;
+export function usePhotoService(): MPhotosService {
+  return PhotosService;
+}
+//export default PhotosService;

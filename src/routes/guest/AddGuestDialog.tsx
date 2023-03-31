@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { MPContext } from "../MPContext";
-import { Guest } from "../service/types";
-import { MPDialog } from "./MPDialog";
+import { Guest } from "../../service/types";
+import { MPContext } from "../../MPContext";
+import { MPDialog } from "../../components/MPDialog";
 import { TextField } from "@mui/material";
-import { usePhotoService } from "../service/mphotoservice";
+import { usePhotoService } from "../../service/mphotoservice";
 
-type AddGuestProps = {
+type AddGuestDialogProps = {
   open: boolean;
   onClose: () => void;
   update: boolean;
@@ -13,18 +13,18 @@ type AddGuestProps = {
   name?: string;
 };
 
-export function AddGuest({
+export function AddGuestDialog({
   open,
   onClose,
   update,
   email,
   name,
-}: AddGuestProps) {
+}: AddGuestDialogProps) {
   const ps = usePhotoService();
-  const context = useContext(MPContext);
   const [newEmail, setNewEmail] = useState<string>("");
   const [newName, setNewName] = useState<string>("");
   const [registered, setRegistered] = useState<Guest>();
+  const context = useContext(MPContext);
 
   useEffect(() => {
     if (email) setNewEmail(email);
@@ -44,7 +44,7 @@ export function AddGuest({
         alert(error);
       }
     };
-    void register();
+    register();
   };
 
   const handleOnClose = () => {
@@ -53,6 +53,14 @@ export function AddGuest({
     }
     onClose();
     setRegistered(undefined);
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewName(event.target.value);
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEmail(event.target.value);
   };
 
   const regText = `In order to be able to comment and like photos you need to register as a guest by providing
@@ -83,7 +91,7 @@ export function AddGuest({
           id="newName"
           label="Name"
           value={newName}
-          onChange={(e) => setNewName(e.target.value)}
+          onChange={handleNameChange}
           fullWidth
         />
         <TextField
@@ -91,7 +99,7 @@ export function AddGuest({
           id="newEmail"
           label="Email"
           value={newEmail}
-          onChange={(e) => setNewEmail(e.target.value)}
+          onChange={handleEmailChange}
           fullWidth
         />
       </MPDialog>
