@@ -29,7 +29,7 @@ type AddItemProps = {
 
 function AddItem({ onAdd }: AddItemProps) {
   return (
-    <Grid2 xs={6} sm={4} md={3} display={"flex"}>
+    <Grid2 xs={6} sm={4} display={"flex"}>
       <Card
         sx={{
           flexDirection: "column",
@@ -69,7 +69,7 @@ function AlbumItem({ a, onEdit, onDelete }: AlbumItemProps) {
   };
 
   return (
-    <Grid2 xs={6} sm={4} md={3} display={"flex"}>
+    <Grid2 xs={6} sm={4} display={"flex"}>
       <Card
         sx={{
           flexDirection: "column",
@@ -189,7 +189,7 @@ export function AlbumGrid() {
 
   return (
     <>
-      <Grid2 container spacing={2} width={"100%"}>
+    <Grid2 container spacing={2}>
         {context.isUser && <AddItem onAdd={onAdd} />}
         {albums.map((album, _) => (
           <AlbumItem

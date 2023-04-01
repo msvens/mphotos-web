@@ -5,7 +5,7 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import {Link as RouterLink} from "react-router-dom";
 
 export type MenuItem = {
   name: string;
@@ -13,7 +13,7 @@ export type MenuItem = {
 };
 
 export function MI(name: string, link?: string): MenuItem {
-  return { name: name, link: link };
+  return {name: name, link: link};
 }
 
 export type MPMenuListProps = {
@@ -23,6 +23,7 @@ export type MPMenuListProps = {
   isSelected: (item: string) => boolean;
   minWidth?: number;
   onSelect?: (item: string) => void;
+  borderBottom?: boolean;
 };
 
 export function MPMenuList(props: MPMenuListProps) {
@@ -33,10 +34,10 @@ export function MPMenuList(props: MPMenuListProps) {
       return (
         <ListItemText
           primary={name}
-          primaryTypographyProps={{ variant: "subtitle1" }}
+          primaryTypographyProps={{variant: "subtitle1"}}
         />
       );
-    } else return <ListItemText primary={name} />;
+    } else return <ListItemText primary={name}/>;
   }
 
   function listButton(key: string, item: MenuItem) {
@@ -69,15 +70,18 @@ export function MPMenuList(props: MPMenuListProps) {
     }
   }
 
+
   return (
     <Box
+      sx={props.borderBottom ? {borderBottom: 1, borderColor: theme.palette.divider} : {
+        borderRight: 1,
+        borderColor: theme.palette.divider,
+        paddingRight: 2,
+      }}
       height={"100%"}
-      borderRight={1}
-      borderColor={theme.palette.divider}
-      paddingRight={theme.spacing(2)}
     >
       <List
-        dense={props.sparse ? false : true}
+        dense={!props.sparse}
         sx={{
           width: "100%",
         }}

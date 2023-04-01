@@ -1,13 +1,13 @@
-import { DocLayout } from "../../layouts/DocLayout";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import {DocLayout} from "../../layouts/DocLayout";
+import {Link as RouterLink, useLocation} from "react-router-dom";
 import Link from "@mui/material/Link";
-import { useContext, useEffect, useState } from "react";
-import { MPContext } from "../../MPContext";
-import { Button, Typography } from "@mui/material";
-import { PersonAdd } from "@mui/icons-material";
-import { MPDialog } from "../../components/MPDialog";
-import { AddGuestDialog } from "./AddGuestDialog";
-import { usePhotoService } from "../../service/mphotoservice";
+import {useContext, useEffect, useState} from "react";
+import {MPContext} from "../../MPContext";
+import {Button, Typography} from "@mui/material";
+import {PersonAdd} from "@mui/icons-material";
+import {MPDialog} from "../../components/MPDialog";
+import {AddGuestDialog} from "./AddGuestDialog";
+import {usePhotoService} from "../../service/mphotoservice";
 
 const buttonLayout = {
   marginTop: 4,
@@ -55,7 +55,7 @@ export function GuestRoute() {
           <Typography variant="h6">Thank you for verifying!</Typography>
           <Typography variant="body2" gutterBottom={true}>
             As a guest at mellowtech you can comment and like photos!
-            <br />
+            <br/>
             To change your guest name or email go to your{" "}
             <Link component={RouterLink} to={"/guest"}>
               guest page
@@ -75,7 +75,7 @@ export function GuestRoute() {
             <Link component={RouterLink} to={"/photo"}>
               individual Photos
             </Link>
-            <br />
+            <br/>
             Continue to{" "}
             <Link component={RouterLink} to={"/"}>
               photo grid
@@ -104,7 +104,7 @@ export function GuestRoute() {
             variant="outlined"
             size={"small"}
             sx={buttonLayout}
-            startIcon={<PersonAdd />}
+            startIcon={<PersonAdd/>}
             onClick={() => setShowAddGuest(true)}
           >
             Update Guest
@@ -141,7 +141,7 @@ export function GuestRoute() {
             variant="outlined"
             size={"small"}
             sx={buttonLayout}
-            startIcon={<PersonAdd />}
+            startIcon={<PersonAdd/>}
             onClick={() => setShowAddGuest(true)}
           >
             Register Guest

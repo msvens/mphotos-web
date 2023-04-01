@@ -1,4 +1,5 @@
-import { Box, styled, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
+import React from "react";
 
 type DocLayoutProps = {
   children: React.ReactNode;
@@ -11,12 +12,11 @@ export function DocLayout({ children }: DocLayoutProps) {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "space-around",
-        overflow: "hidden",
-        paddingLeft: 0,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
         margin: "auto",
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(2),
-        width: 700,
         maxWidth: 700,
       }}
     >

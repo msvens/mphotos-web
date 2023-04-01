@@ -89,7 +89,7 @@ export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
         <Typography></Typography>
         {children}
       </Box>
-      <Table sx={{ maxWidth: 600 }} aria-label="Camera Specs" size={"small"}>
+      <Table sx={{ maxWidth: 600}} aria-label="Camera Specs" size={"small"}>
         <TableBody>
           {Object.getOwnPropertyNames(camera)
             .filter((v) => v !== "id" && v !== "image")
