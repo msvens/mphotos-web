@@ -58,7 +58,7 @@ export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
         <SmallImg
           sx={{ maxWidth: "400px" }}
           alt={camera.model}
-          src={ps.getCameraImageUrl(camera, CameraImageSize.Small)}
+          src={ps.getCameraImageUrl(camera, CameraImageSize.Medium)}
         />
       </Box>
       <Box

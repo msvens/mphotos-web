@@ -45,7 +45,6 @@ export function AlbumIdRoute() {
     const update = async () => {
       if (album) {
         const imgUrl = ps.getImageUrl(p, PhotoType.Landscape, false, false);
-        alert(imgUrl);
         try {
           const res = await ps.updateAlbum({
             ...album,

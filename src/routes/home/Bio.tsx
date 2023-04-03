@@ -71,9 +71,9 @@ export function Bio() {
               size="small"
               color="inherit"
               component={RouterLink}
-              to={"/user"}
+              to={"/account"}
             >
-              Admin
+              Account
             </Button>
           </Grid2>
         )}

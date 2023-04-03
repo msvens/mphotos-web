@@ -218,15 +218,16 @@ class MPhotosService {
     return p.cameraModel.toLowerCase().replace(/\s+/g, "-");
   }
 
-  getCameraImageUrl(
-    camera: mt.Camera,
+  getCameraImageUrl(camera: mt.Camera,
     size: mt.CameraImageSize = mt.CameraImageSize.Original
   ) {
     if (camera.image === "") {
       return "/camera-outline.png";
     } else if (size === mt.CameraImageSize.Original)
       return `/api/cameras/${camera.id}/image`;
-    else return `/api/cameras/${camera.id}/image/${size}`;
+    else{
+      return `/api/cameras/${camera.id}/image/${size}`;
+    }
   }
 
   getCameras(): Promise<mt.Camera[]> {
@@ -422,10 +423,11 @@ class MPhotosService {
   }
 
   uploadCameraImage(cameraId: string, file: File): Promise<mt.Camera> {
+    console.log(file.name)
     const formData = new FormData();
-    formData.append("image", file, file.name);
+    formData.append("cameraImage", file, file.name);
     return MPhotosService.reqMPBody(
-      `/api/cameras/${cameraId}/image/upoad`,
+      `/api/cameras/${cameraId}/image/upload`,
       formData
     )
       .then((res) => res as MPhotosResponse<mt.Camera>)
