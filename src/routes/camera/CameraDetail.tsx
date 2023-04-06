@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { SmallImg } from "../../layouts/Images";
 import { usePhotoService } from "../../service/mphotoservice";
+import { useIsLargeScreen } from "../../hooks/useIsLargeScreen";
 
 type DetailProps = {
   camera: Camera;
@@ -27,6 +28,8 @@ type DetailProps = {
 export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
   const theme = useTheme();
   const ps = usePhotoService();
+  const largeScreen = useIsLargeScreen();
+
   function getQuery() {
     return toQueryString(createPhotoSearchParams(camera.model));
   }
@@ -58,7 +61,7 @@ export function CameraDetail({ camera, onUpdate, children }: DetailProps) {
         <SmallImg
           sx={{ maxWidth: "400px" }}
           alt={camera.model}
-          src={ps.getCameraImageUrl(camera, CameraImageSize.Medium)}
+          src={ps.getCameraImageUrl(camera, largeScreen ? CameraImageSize.Medium : CameraImageSize.Small)}
         />
       </Box>
       <Box

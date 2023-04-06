@@ -1,14 +1,14 @@
-import {Box, useMediaQuery, useTheme} from "@mui/material";
+import {Box} from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import {MPMenuList, MPMenuListProps} from "../components/MPMenuList";
+import { useIsLargeScreen } from "../hooks/useIsLargeScreen";
 
 type MenuListLayoutProps = {
   children: React.ReactNode;
 } & MPMenuListProps;
 
 export function MenuListLayout(props: MenuListLayoutProps) {
-  const theme = useTheme();
-  const largeDisplay = useMediaQuery(theme.breakpoints.up("sm"));
+  const largeDisplay = useIsLargeScreen();
 
   return (
     <Box sx={{

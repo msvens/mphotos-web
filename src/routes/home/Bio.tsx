@@ -4,14 +4,13 @@ import {
   Button,
   Divider,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useContext } from "react";
 import { MPContext } from "../../MPContext";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 import { Link as RouterLink } from "react-router-dom";
+import { useIsLargeScreen } from "../../hooks/useIsLargeScreen";
 
 function getImgClass(isLargeDisplay: boolean) {
   if (isLargeDisplay) {
@@ -31,8 +30,7 @@ function getImgClass(isLargeDisplay: boolean) {
   }
 }
 export function Bio() {
-  const theme = useTheme();
-  const isLargeDisplay = useMediaQuery(theme.breakpoints.up("sm"));
+  const isLargeDisplay = useIsLargeScreen();
   const context = useContext(MPContext);
 
   return (

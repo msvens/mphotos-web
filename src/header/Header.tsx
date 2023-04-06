@@ -5,9 +5,7 @@ import {
   IconButton,
   Link,
   Toolbar,
-  Typography,
-  useMediaQuery,
-  useTheme,
+  Typography
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useContext } from "react";
@@ -23,6 +21,7 @@ import {
   PhotoCameraOutlined,
   PhotoOutlined,
 } from "@mui/icons-material";
+import { useIsLargeScreen } from "../hooks/useIsLargeScreen";
 
 type HeaderProps = {
   search?: boolean;
@@ -30,9 +29,8 @@ type HeaderProps = {
 
 export function Header(p: HeaderProps) {
   const context = useContext(MPContext);
-  const theme = useTheme();
-  const burgerMenu = useMediaQuery(theme.breakpoints.down("sm"));
-  const showSearch = p.search && !burgerMenu;
+  const largeScreen = useIsLargeScreen();
+  const showSearch = p.search && largeScreen;
   const iconFSize = context.uxConfig.denseTopBar ? "medium" : "large";
 
   return (
@@ -72,7 +70,7 @@ export function Header(p: HeaderProps) {
         </Link>
         {showSearch && <Search />}
         <Box sx={{ flexGrow: 1 }} />
-        {burgerMenu ? (
+        {!largeScreen ? (
           <HamburgerMenu />
         ) : (
           <>

@@ -6,7 +6,7 @@ import { MPContext } from "../../MPContext";
 import { colorScheme } from "../../service/apiutil";
 import { Photoslice } from "../../service/photoslice";
 import { SearchFilter } from "./SearchFilter";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { PhotoDeckControls } from "./PhotoDeckControls";
 import { DeckImage } from "./DeckImage";
 import { FullscreenView } from "./FullscreenView";
@@ -15,6 +15,7 @@ import { EditMetaData } from "./EditMetaData";
 import { MPDialog } from "../MPDialog";
 import { Detail } from "./Detail";
 import { usePhotoService } from "../../service/mphotoservice";
+import { useIsLargeScreen } from "../../hooks/useIsLargeScreen";
 
 const LargeImgGridSx = {
   position: "relative",
@@ -65,7 +66,6 @@ type MPPhotoDeckProps = {
 
 export function MPPhotoDeck(props: MPPhotoDeckProps) {
   const ps = usePhotoService();
-  const theme = useTheme();
   const navigate = useNavigate();
   const context = useContext(MPContext);
 
@@ -78,7 +78,7 @@ export function MPPhotoDeck(props: MPPhotoDeckProps) {
   const [showFullscreen, setShowFullscreen] = useState(false);
 
   const portrait = useMediaQuery("(orientation: portrait)");
-  const largeDisplay = useMediaQuery(theme.breakpoints.up("sm"));
+  const largeDisplay = useIsLargeScreen();
 
   const touch: TouchState = { xStart: -1, xPos: -1, yStart: -1, yPos: -1 };
   const cs = colorScheme(context.uxConfig.photoBackgroundColor);
