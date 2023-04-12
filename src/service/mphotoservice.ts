@@ -1,4 +1,5 @@
 import * as mt from "./types";
+import {PhotoList} from "./types";
 
 type MPhotosResponse<T> = {
   error?: mt.ApiError;
@@ -408,6 +409,18 @@ class MPhotosService {
       .then((res) => MPhotosService.convert(res));
   }
 
+  updateAlbumOrder(album: mt.Album, pl: PhotoList): Promise<mt.Album> {
+    //might not be the nicest solution but will do for now
+    if(pl.length < 2) {
+      return Promise.resolve(album)
+    }
+    const photoIds = pl.photos.map((p) => p.id)
+    const data = { photos: photoIds };
+    return MPhotosService.reqBody(`/api/albums/${album.id}/order`, data)
+      .then((res) => res as MPhotosResponse<mt.Album>)
+      .then((res) => MPhotosService.convert(res));
+  }
+
   updateCamera(camera: mt.Camera): Promise<mt.Camera> {
     return MPhotosService.reqBody(`/api/cameras/${camera.id}`, camera)
       .then((res) => res as MPhotosResponse<mt.Camera>)
@@ -483,7 +496,7 @@ class MPhotosService {
   }
 
   updateUserDrive(name: string): Promise<mt.User> {
-    alert("change folder name to " + name);
+    //alert("change folder name to " + name);
     return MPhotosService.reqBody("/api/user/gdrive", { driveFolderName: name })
       .then((res) => res as MPhotosResponse<mt.User>)
       .then((res) => MPhotosService.convert(res));

@@ -31,7 +31,7 @@ export function HomeRoute() {
     });
   }
 
-  function getItemBar(p: Photo): ReactNode {
+  function getItemBar(p: Photo, idx: number): ReactNode {
     if (!context.isUser) {
       return null;
     }
@@ -77,12 +77,6 @@ export function HomeRoute() {
           itemListBar={getItemBar}
         />
       )}
-      {/*<PhotoGrid
-        fetchItems={context.uxConfig.photoItemsLoad}
-        columns={context.uxConfig.photoGridCols}
-        spacing={context.uxConfig.photoGridSpacing}
-        order="drive"
-      />*/}
     </Box>
   );
 }

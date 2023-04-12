@@ -33,6 +33,28 @@ export class Photoslice {
     return new Photoslice(newPhotos, newIdx);
   }
 
+  moveBackward(): Photoslice {
+    if(this.photos.length < 2) { //nothing to do
+      return this
+    }
+    const newIdx = this.idx - 1 < 0 ? this.photos.length - 1 : this.idx - 1;
+    const swap = this.photos[this.idx]
+    this.photos[newIdx] = this.photos[this.idx]
+    this.photos[this.idx] = swap
+    return new Photoslice(this.photos, newIdx)
+  }
+
+  moveForward(): Photoslice {
+    if(this.photos.length < 2) { //nothing to do
+      return this
+    }
+    const newIdx = this.idx + 1 >= this.photos.length ? 0 : this.idx + 1;
+    const swap = this.photos[this.idx]
+    this.photos[newIdx] = this.photos[this.idx]
+    this.photos[this.idx] = swap
+    return new Photoslice(this.photos, newIdx)
+  }
+
   update(p: Photo): Photoslice {
     const newPhotos = this.photos.map((photo) => {
       if (photo.id === p.id) {

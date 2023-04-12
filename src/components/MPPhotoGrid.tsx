@@ -15,16 +15,16 @@ const ThumbPrivate = styled("img")({
   opacity: 0.5,
 });
 
-type MpPhotoGridProps = {
+type MPPhotoGridProps = {
   columns: number;
   linkTo: string;
   masonry?: boolean;
   spacing: number;
   items: Photo[];
-  itemListBar?: (p: Photo) => ReactNode;
+  itemListBar?: (p: Photo, idx: number) => ReactNode;
 };
 
-export function MPPhotoGrid(props: MpPhotoGridProps) {
+export function MPPhotoGrid(props: MPPhotoGridProps) {
   const ps = usePhotoService();
 
   function thumbUrl(p: Photo) {
@@ -38,7 +38,7 @@ export function MPPhotoGrid(props: MpPhotoGridProps) {
       gap={props.spacing}
       sx={{ overflow: "hidden" }}
     >
-      {props.items.map((photo) => (
+      {props.items.map((photo, index) => (
         <ImageListItem
           sx={{ width: "100%", height: "100%" }}
           cols={1}
@@ -59,7 +59,7 @@ export function MPPhotoGrid(props: MpPhotoGridProps) {
               />
             )}
           </RouterLink>
-          {props.itemListBar && props.itemListBar(photo)}
+          {props.itemListBar && props.itemListBar(photo, index)}
         </ImageListItem>
       ))}
     </ImageList>
